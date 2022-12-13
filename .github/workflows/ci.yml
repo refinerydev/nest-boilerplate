@@ -31,9 +31,6 @@ jobs:
       - name: Run Testing
         run: npm run test:cov
 
-      - name: Run Build
-        run: npm run build
-
       - name: Set Up Codeclimate and Send Report Codeclimate
         uses: paambaati/codeclimate-action@v2.7.5
         env:
