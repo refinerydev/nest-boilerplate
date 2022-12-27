@@ -41,6 +41,9 @@ jobs:
       - name: Run Testing
         run: npm run test:cov
 
+      - name: Run Migration
+        run: npx prisma migrate dev --name "init"
+
       - name: Set Up Codeclimate and Send Report Codeclimate
         uses: paambaati/codeclimate-action@v2.7.5
         env:
