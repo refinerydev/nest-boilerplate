@@ -37,12 +37,12 @@ jobs:
           touch .env
           echo DATABASE_URL="postgres://nestjs_test:nestjs_test@localhost:5432/nestjs_test">> .env
           cat .env
+      
+      - name: Run Migration
+        run: npx prisma migrate dev --name "init"
 
       - name: Run Testing
         run: npm run test:cov
-
-      - name: Run Migration
-        run: npx prisma migrate dev --name "init"
 
       - name: Set Up Codeclimate and Send Report Codeclimate
         uses: paambaati/codeclimate-action@v2.7.5
