@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    environment:
+      DB_HOST: postgres
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    networks:
+      - nestjs-boilerplate
+
+  postgres:
+    image: postgres:13.5
+    container_name: local_pgdb
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    ports:
+      - ${DB_PORT}:5432
+    networks:
+      - nestjs-boilerplate
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${DB_USERNAME}
+      PGADMIN_DEFAULT_PASSWORD: ${DB_PASSWORD}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "8081:80"
+    networks:
+      - nestjs-boilerplate
+    restart: unless-stopped
+
+networks:
+  nestjs-boilerplate:
