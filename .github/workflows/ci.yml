@@ -21,7 +21,6 @@ jobs:
         image: postgres:13.5
         options: '--health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 3'
         env:
-          POSTGRES_HOST: postgres
           POSTGRES_USER: 'nestjs_test'
           POSTGRES_PASSWORD: 'nestjs_test'
           POSTGRES_HOST_AUTH_METHOD: 'trust'
@@ -42,7 +41,7 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo DATABASE_URL="postgres://nestjs_test:nestjs_test@postgres:5432/nestjs_test">> .env
+          echo DATABASE_URL="postgres://nestjs_test:nestjs_test@localhost:5432/nestjs_test">> .env
           cat .env
       
       - name: Run Migration
