@@ -42,6 +42,10 @@ jobs:
       - name: Create env file
         run: |
           touch .env
+          echo APP_NAME="nestjs-boilerplate">> .env
+          echo APP_URL="localhost">> .env
+          echo DB_HOST="localhost">> .env
+          echo DB_PORT="3306">> .env
           echo DB_USERNAME="nestjs-boilerplate">> .env
           echo DB_PASSWORD="nestjs-boilerplate">> .env
           echo DB_DATABASE="nestjs-boilerplate">> .env
