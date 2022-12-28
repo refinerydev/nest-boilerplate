@@ -17,7 +17,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           database: configService.get('mysql.database'),
           autoLoadEntities: true,
           synchronize: !isProduction,
-          logging: !isProduction,
         };
       },
       inject: [ConfigService],
