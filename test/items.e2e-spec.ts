@@ -3,7 +3,12 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from './../src/app.module';
 
-describe('AppController (e2e)', () => {
+const newArticle = {
+  name: 'name1',
+  category_id: '123',
+};
+
+describe('ArticlesController (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
@@ -16,9 +21,13 @@ describe('AppController (e2e)', () => {
   });
 
   it('/ (GET)', () => {
+    return request(app.getHttpServer()).get('/items').expect(200);
+  });
+
+  it('/ (POST)', () => {
     return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!!!');
+      .post('/items')
+      .send(newArticle)
+      .expect(201);
   });
 });

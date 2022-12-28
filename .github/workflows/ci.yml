@@ -16,6 +16,16 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: mysql:8
+        options: '--health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 3'
+        env:
+          DB_USERNAME: 'nestjs-boilerplate'
+          DB_PASSWORD: 'nestjs-boilerplate'
+          DB_DATABASE: 'nestjs-boilerplate'
+        ports:
+          - 3306:3306
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -27,6 +37,14 @@ jobs:
 
       - name: Run NPM Install
         run: npm install
+
+      - name: Create env file
+        run: |
+          touch .env
+          echo DB_USERNAME="nestjs-boilerplate">> .env
+          echo DB_PASSWORD="nestjs-boilerplate">> .env
+          echo DB_DATABASE="nestjs-boilerplate">> .env
+          cat .env
 
       - name: Run Testing
         run: npm run test:cov
