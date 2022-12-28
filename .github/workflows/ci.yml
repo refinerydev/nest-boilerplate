@@ -17,15 +17,16 @@ jobs:
   test:
     runs-on: ubuntu-latest
     services:
-      postgres:
-        image: postgres:13.5
-        options: '--health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 3'
+      mysql:
+        image: mysql:8
+        options: '--health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5'
         env:
-          POSTGRES_USER: 'nestjs_test'
-          POSTGRES_PASSWORD: 'nestjs_test'
-          POSTGRES_HOST_AUTH_METHOD: 'trust'
+          MYSQL_ROOT_PASSWORD: 'nestjs-boilerplate'
+          MYSQL_USER: 'nestjs-boilerplate'
+          MYSQL_PASSWORD: 'nestjs-boilerplate'
+          MYSQL_DATABASE: 'nestjs-boilerplate'
         ports:
-          - 5432:5432
+          - 3306:3306
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -41,11 +42,14 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo DATABASE_URL="postgres://nestjs_test:nestjs_test@localhost:5432/nestjs_test">> .env
+          echo APP_NAME="nestjs-boilerplate">> .env
+          echo APP_URL="localhost">> .env
+          echo DB_HOST="localhost">> .env
+          echo DB_PORT="3306">> .env
+          echo DB_USERNAME="nestjs-boilerplate">> .env
+          echo DB_PASSWORD="nestjs-boilerplate">> .env
+          echo DB_DATABASE="nestjs-boilerplate">> .env
           cat .env
-      
-      - name: Run Migration
-        run: npx prisma migrate dev --name "init"
 
       - name: Run Testing
         run: npm run test:cov

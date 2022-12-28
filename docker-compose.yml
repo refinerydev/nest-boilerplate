@@ -1,45 +1,47 @@
-version: "3.7"
+version: '3.8'
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - postgres
+      - mysql
     env_file:
       - .env
     environment:
-      DB_HOST: postgres
+      DB_HOST: mysql
     ports:
       - ${APP_PORT}:${APP_PORT}
     networks:
       - nestjs-boilerplate
 
-  postgres:
-    image: postgres:13.5
-    container_name: local_pgdb
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_DATABASE}
+  mysql:
+    image: mysql:8
+    restart: always
     ports:
-      - ${DB_PORT}:5432
+      - ${DB_PORT}:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     networks:
       - nestjs-boilerplate
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin4_container
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${DB_USERNAME}
-      PGADMIN_DEFAULT_PASSWORD: ${DB_PASSWORD}
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    links: 
+      - mysql
     ports:
-      - "8081:80"
+      - '8080:80'
+    depends_on: 
+      - mysql
+    environment:
+      - PMA_HOST=mysql
+      - PMA_USER=${DB_USERNAME}
+      - PMA_PASSWORD=${DB_PASSWORD}
     networks:
       - nestjs-boilerplate
-    restart: unless-stopped
 
 networks:
   nestjs-boilerplate:

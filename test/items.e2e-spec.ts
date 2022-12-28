@@ -3,11 +3,9 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from './../src/app.module';
 
-const newArticle = {
-  title: 'testettete',
-  description: 'string',
-  body: 'string',
-  published: false,
+const newItem = {
+  name: 'name1',
+  category_id: '123',
 };
 
 describe('ArticlesController (e2e)', () => {
@@ -23,13 +21,17 @@ describe('ArticlesController (e2e)', () => {
   });
 
   it('/ (GET)', () => {
-    return request(app.getHttpServer()).get('/articles').expect(200);
+    return request(app.getHttpServer()).get('/items').expect(200);
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 
   it('/ (POST)', () => {
     return request(app.getHttpServer())
-      .post('/articles')
-      .send(newArticle)
+      .post('/items')
+      .send(newItem)
       .expect(201);
   });
 });
