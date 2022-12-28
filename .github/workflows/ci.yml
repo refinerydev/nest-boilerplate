@@ -17,13 +17,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     services:
-      postgres:
+      mysql:
         image: mysql:8
         options: '--health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 3'
         env:
-          DB_USERNAME: 'nestjs-boilerplate'
-          DB_PASSWORD: 'nestjs-boilerplate'
-          DB_DATABASE: 'nestjs-boilerplate'
+          MYSQL_ROOT_PASSWORD: 'nestjs-boilerplate'
+          MYSQL_USER: 'nestjs-boilerplate'
+          MYSQL_PASSWORD: 'nestjs-boilerplate'
+          MYSQL_DATABASE: 'nestjs-boilerplate'
         ports:
           - 3306:3306
     steps:
